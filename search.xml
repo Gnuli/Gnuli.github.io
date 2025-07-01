@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2025PolarCTF夏季挑战赛个人WP-misc部分复现</title>
+    <url>/2025/06/24/2025PolarCTF%E5%A4%8F%E5%AD%A3%E6%8C%91%E6%88%98%E8%B5%9B%E4%B8%AA%E4%BA%BAWP-misc%E9%83%A8%E5%88%86%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="2025PolarCTF夏季挑战赛个人WP-misc部分复现"><a href="#2025PolarCTF夏季挑战赛个人WP-misc部分复现" class="headerlink" title="2025PolarCTF夏季挑战赛个人WP-misc部分复现"></a>2025PolarCTF夏季挑战赛个人WP-misc部分复现</h1><h3 id="秘密的消息"><a href="#秘密的消息" class="headerlink" title="秘密的消息"></a>秘密的消息</h3><h4 id="第一层"><a href="#第一层" class="headerlink" title="第一层"></a>第一层</h4><p>@^bp^o，根据背景，凯撒解密</p>
+<p>mode2 移位3时拿到密钥: Caesar</p>
+<h4 id="第二层"><a href="#第二层" class="headerlink" title="第二层"></a>第二层</h4><p>👉👦👤👘</p>
+<p>一眼base100，解密拿到密码</p>
+<h4 id="第三层"><a href="#第三层" class="headerlink" title="第三层"></a>第三层</h4><p>一眼base64，解密拿到flag</p>
+<h3 id="狂热粉丝"><a href="#狂热粉丝" class="headerlink" title="狂热粉丝"></a>狂热粉丝</h3><p>双击ovf文件打开虚拟机</p>
+<h4 id="题1"><a href="#题1" class="headerlink" title="题1"></a>题1</h4><p> 1.黑客在虚拟机内使用什么交流的？</p>
+<p>查看浏览器历史记录：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174253028.png" alt="image-20250623174252900" loading="lazy"></p>
+<p>Tinode</p>
+<h4 id="题2"><a href="#题2" class="headerlink" title="题2"></a>题2</h4><p>2.黑客传输的木马名为什么？</p>
+<p>在Program目录下有一个很特殊的exe文件：<br><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174642429.png" alt="image-20250623174642347" loading="lazy"></p>
+<p>NewWorld.exe</p>
+<h4 id="题3"><a href="#题3" class="headerlink" title="题3"></a>题3</h4><p> 3.黑客使用什么语言编程的木马？</p>
+<p>查看源码得知为python</p>
+<p>python</p>
+<h4 id="题4"><a href="#题4" class="headerlink" title="题4"></a>题4</h4><p> 4.黑客搭建网站的IP是多少？</p>
+<p>查看历史记录得知ip</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623175512821.png" alt="image-20250623175512765" loading="lazy"></p>
+<h4 id="题5"><a href="#题5" class="headerlink" title="题5"></a>题5</h4><p> 5.黑客木马勒索加密了什么文件？、</p>
+<p>查看program目录下的main.py文件</p>
+<p>得知是加密了cmd.exe文件：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174930468.png" alt="image-20250623174930407" loading="lazy"></p>
+<h4 id="题6"><a href="#题6" class="headerlink" title="题6"></a>题6</h4><p> 6.黑客的内部群聊地址是多少</p>
+<p>github上搜索Tinode源码，搭建Tinode</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">docker network create tinode-net</span><br><span class="line"></span><br><span class="line">docker run --name mysql --network tinode-net --restart always \</span><br><span class="line">  --env MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql:<span class="number">5.7</span></span><br><span class="line"></span><br><span class="line">docker run -p <span class="number">6060</span>:<span class="number">6060</span> -d --name tinode-srv --network tinode-net \</span><br><span class="line">  tinode/tinode-mysql:latest</span><br><span class="line"></span><br><span class="line">docker cp ***.sql mysql:/tmp/init.sql </span><br><span class="line"></span><br><span class="line">docker <span class="built_in">exec</span> -it mysql bash</span><br><span class="line"></span><br><span class="line">mysql -u root</span><br><span class="line"></span><br><span class="line">CREATE DATABASE tinode;</span><br><span class="line">USE tinode;</span><br><span class="line"></span><br><span class="line">SOURCE /tmp/init.sql;</span><br><span class="line"></span><br><span class="line">exit;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183321258.png" alt="image-20250623183321211" loading="lazy"></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183254414.png" alt="image-20250623183254281" loading="lazy"></p>
+<p>grp93xtyNFZXes</p>
+<h3 id="jumpsever"><a href="#jumpsever" class="headerlink" title="jumpsever"></a>jumpsever</h3><p>根据题目，附件为完整虚拟机，且是jumpserver开源堡垒机</p>
+<p>启动堡垒机：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cd /opt/jumpserver-installer-v4<span class="number">.8</span><span class="number">.1</span></span><br><span class="line">./jmsctl.sh  start</span><br></pre></td></tr></table></figure>
+
+<p>启动后访问客户端：弱密码：admin&#x2F;123456</p>
+<h4 id="题1-1"><a href="#题1-1" class="headerlink" title="题1"></a>题1</h4><p> 1.攻击者的ip</p>
+<p>审计台查看登录日志</p>
+<p>发现攻击者ip：</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623161903058.png" alt="image-20250623161902954" loading="lazy"></p>
+<p>flag{192.168.20.1}</p>
+<h4 id="题2-1"><a href="#题2-1" class="headerlink" title="题2"></a>题2</h4><p> 2.攻击者第一次攻击的时间</p>
+<p>如题一：</p>
+<p>flag{2025&#x2F;04&#x2F;07 19:27:39}</p>
+<h4 id="题3-1"><a href="#题3-1" class="headerlink" title="题3"></a>题3</h4><p> 3.Flag标签的md532小写值</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162423057.png" alt="image-20250623162422959" loading="lazy"></p>
+<p>flag{7976e84b35681b027b711652dc0a3ed3}</p>
+<h4 id="题4-1"><a href="#题4-1" class="headerlink" title="题4"></a>题4</h4><p> 4.网站的用户数量</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162618081.png" alt="image-20250623162617976" loading="lazy"></p>
+<p>flag{6}</p>
+<h4 id="题5-1"><a href="#题5-1" class="headerlink" title="题5"></a>题5</h4><p> 5.连接员工信息资产的账号有多少</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162608456.png" alt="image-20250623162608238" loading="lazy"></p>
+<p>flag{2}</p>
+<h3 id="最爱的专辑"><a href="#最爱的专辑" class="headerlink" title="最爱的专辑"></a>最爱的专辑</h3><p>题目给的base64解码结果为：我爱火星哥</p>
+<p>deepsound发现隐藏加密文件，解密拿到压缩包</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153519625.png" alt="image-20250624153519548" loading="lazy"></p>
+<p>拿到apt.jpg和短信信息文件夹</p>
+<p>图片中发现压缩包</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153936397.png" alt="image-20250624153936341" loading="lazy"></p>
+<p>解压密码就是短信信息了</p>
+<p>提示九键，尝试九键解密</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624154337141.png" alt="image-20250624154337086" loading="lazy"></p>
+<p>解压密码是Bruno Mars</p>
+<h3 id="为什么关机又关机"><a href="#为什么关机又关机" class="headerlink" title="为什么关机又关机"></a>为什么关机又关机</h3><p>bat中是关机脚本。很明显下面有0宽隐写</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155241522.png" alt="image-20250624155241355" loading="lazy"></p>
+<p>但是常见网址无法解密，在特殊网站可以解密<a href="https://33tool.com/text_cloak/#show">文字隐藏加密&#x2F;解密 - 蜻蜓在线工具</a></p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155554058.png" alt="image-20250624155553940" loading="lazy"></p>
+<p>解密后拿到exe，文件属性有问题</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155707481.png" alt="image-20250624155707415" loading="lazy"></p>
+<p>最后的jpg使用steghide隐写，密码为图片中威力的计算结果160</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624160635267.png" alt="image-20250624160635170" loading="lazy"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">steghide extract -sf 女王威力很强奥.jpg -p <span class="string">&quot;160&quot;</span></span><br><span class="line">	wrote extracted data to <span class="string">&quot;flag.txt&quot;</span>.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="doro"><a href="#doro" class="headerlink" title="doro"></a>doro</h3><p>提取出gif的帧间隔，可以发现帧间隔存在60和30</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>并且帧的个数和房间号相匹配。将帧为60的房间号提取出来。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>,<span class="number">4</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">22</span>,<span class="number">25</span>,<span class="number">29</span>,<span class="number">33</span>,<span class="number">34</span>,<span class="number">35</span>,<span class="number">37</span>,<span class="number">38</span>,<span class="number">39</span>,<span class="number">57</span>,<span class="number">58</span>,<span class="number">59</span>,<span class="number">60</span>,<span class="number">65</span>,<span class="number">66</span>,<span class="number">67</span>,<span class="number">72</span></span><br></pre></td></tr></table></figure>
+
+<p>hint中提到2025年5月1日0时，注意到文件的修改时间很特殊，用其时间戳做差，转为ASCII码，提取出来帧为60的房间号对应的ASCII码</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162040739.png" alt="image-20250624162040673" loading="lazy"></p>
+<p>最后拿到结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dorolikestoeatoranges</span><br></pre></td></tr></table></figure>
+
+<p>解压拿到flag</p>
+<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162258689.png" alt="image-20250624162258626" loading="lazy"></p>
+]]></content>
+      <categories>
+        <category>2025比赛归纳</category>
+      </categories>
+      <tags>
+        <tag>CTF赛事</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LitCTF2025赛题复现</title>
     <url>/2025/05/28/LitCTF2025%E8%B5%9B%E9%A2%98%E5%A4%8D%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="LitCTF2025赛题复现"><a href="#LitCTF2025赛题复现" class="headerlink" title="LitCTF2025赛题复现"></a>LitCTF2025赛题复现</h1><h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="LitCTF-2025-灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄"><a href="#LitCTF-2025-灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄" class="headerlink" title="[LitCTF 2025]灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄"></a>[LitCTF 2025]灵感菇🍄哩菇哩菇哩哇擦灵感菇灵感菇🍄</h3><p>源代码中有github网址</p>
@@ -91,104 +189,6 @@
 <h3 id="LitCTF-2025-多重宇宙日记"><a href="#LitCTF-2025-多重宇宙日记" class="headerlink" title="[LitCTF 2025]多重宇宙日记"></a>[LitCTF 2025]多重宇宙日记</h3><p>exp：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;settings&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;__proto__&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;isAdmin&quot;</span>: true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-]]></content>
-      <categories>
-        <category>2025比赛归纳</category>
-      </categories>
-      <tags>
-        <tag>CTF赛事</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2025PolarCTF夏季挑战赛个人WP-misc部分复现</title>
-    <url>/2025/06/24/2025PolarCTF%E5%A4%8F%E5%AD%A3%E6%8C%91%E6%88%98%E8%B5%9B%E4%B8%AA%E4%BA%BAWP-misc%E9%83%A8%E5%88%86%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="2025PolarCTF夏季挑战赛个人WP-misc部分复现"><a href="#2025PolarCTF夏季挑战赛个人WP-misc部分复现" class="headerlink" title="2025PolarCTF夏季挑战赛个人WP-misc部分复现"></a>2025PolarCTF夏季挑战赛个人WP-misc部分复现</h1><h3 id="秘密的消息"><a href="#秘密的消息" class="headerlink" title="秘密的消息"></a>秘密的消息</h3><h4 id="第一层"><a href="#第一层" class="headerlink" title="第一层"></a>第一层</h4><p>@^bp^o，根据背景，凯撒解密</p>
-<p>mode2 移位3时拿到密钥: Caesar</p>
-<h4 id="第二层"><a href="#第二层" class="headerlink" title="第二层"></a>第二层</h4><p>👉👦👤👘</p>
-<p>一眼base100，解密拿到密码</p>
-<h4 id="第三层"><a href="#第三层" class="headerlink" title="第三层"></a>第三层</h4><p>一眼base64，解密拿到flag</p>
-<h3 id="狂热粉丝"><a href="#狂热粉丝" class="headerlink" title="狂热粉丝"></a>狂热粉丝</h3><p>双击ovf文件打开虚拟机</p>
-<h4 id="题1"><a href="#题1" class="headerlink" title="题1"></a>题1</h4><p> 1.黑客在虚拟机内使用什么交流的？</p>
-<p>查看浏览器历史记录：</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174253028.png" alt="image-20250623174252900" loading="lazy"></p>
-<p>Tinode</p>
-<h4 id="题2"><a href="#题2" class="headerlink" title="题2"></a>题2</h4><p>2.黑客传输的木马名为什么？</p>
-<p>在Program目录下有一个很特殊的exe文件：<br><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174642429.png" alt="image-20250623174642347" loading="lazy"></p>
-<p>NewWorld.exe</p>
-<h4 id="题3"><a href="#题3" class="headerlink" title="题3"></a>题3</h4><p> 3.黑客使用什么语言编程的木马？</p>
-<p>查看源码得知为python</p>
-<p>python</p>
-<h4 id="题4"><a href="#题4" class="headerlink" title="题4"></a>题4</h4><p> 4.黑客搭建网站的IP是多少？</p>
-<p>查看历史记录得知ip</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623175512821.png" alt="image-20250623175512765" loading="lazy"></p>
-<h4 id="题5"><a href="#题5" class="headerlink" title="题5"></a>题5</h4><p> 5.黑客木马勒索加密了什么文件？、</p>
-<p>查看program目录下的main.py文件</p>
-<p>得知是加密了cmd.exe文件：</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623174930468.png" alt="image-20250623174930407" loading="lazy"></p>
-<h4 id="题6"><a href="#题6" class="headerlink" title="题6"></a>题6</h4><p> 6.黑客的内部群聊地址是多少</p>
-<p>github上搜索Tinode源码，搭建Tinode</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">docker network create tinode-net</span><br><span class="line"></span><br><span class="line">docker run --name mysql --network tinode-net --restart always \</span><br><span class="line">  --env MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql:<span class="number">5.7</span></span><br><span class="line"></span><br><span class="line">docker run -p <span class="number">6060</span>:<span class="number">6060</span> -d --name tinode-srv --network tinode-net \</span><br><span class="line">  tinode/tinode-mysql:latest</span><br><span class="line"></span><br><span class="line">docker cp ***.sql mysql:/tmp/init.sql </span><br><span class="line"></span><br><span class="line">docker <span class="built_in">exec</span> -it mysql bash</span><br><span class="line"></span><br><span class="line">mysql -u root</span><br><span class="line"></span><br><span class="line">CREATE DATABASE tinode;</span><br><span class="line">USE tinode;</span><br><span class="line"></span><br><span class="line">SOURCE /tmp/init.sql;</span><br><span class="line"></span><br><span class="line">exit;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183321258.png" alt="image-20250623183321211" loading="lazy"></p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623183254414.png" alt="image-20250623183254281" loading="lazy"></p>
-<p>grp93xtyNFZXes</p>
-<h3 id="jumpsever"><a href="#jumpsever" class="headerlink" title="jumpsever"></a>jumpsever</h3><p>根据题目，附件为完整虚拟机，且是jumpserver开源堡垒机</p>
-<p>启动堡垒机：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cd /opt/jumpserver-installer-v4<span class="number">.8</span><span class="number">.1</span></span><br><span class="line">./jmsctl.sh  start</span><br></pre></td></tr></table></figure>
-
-<p>启动后访问客户端：弱密码：admin&#x2F;123456</p>
-<h4 id="题1-1"><a href="#题1-1" class="headerlink" title="题1"></a>题1</h4><p> 1.攻击者的ip</p>
-<p>审计台查看登录日志</p>
-<p>发现攻击者ip：</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623161903058.png" alt="image-20250623161902954" loading="lazy"></p>
-<p>flag{192.168.20.1}</p>
-<h4 id="题2-1"><a href="#题2-1" class="headerlink" title="题2"></a>题2</h4><p> 2.攻击者第一次攻击的时间</p>
-<p>如题一：</p>
-<p>flag{2025&#x2F;04&#x2F;07 19:27:39}</p>
-<h4 id="题3-1"><a href="#题3-1" class="headerlink" title="题3"></a>题3</h4><p> 3.Flag标签的md532小写值</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162423057.png" alt="image-20250623162422959" loading="lazy"></p>
-<p>flag{7976e84b35681b027b711652dc0a3ed3}</p>
-<h4 id="题4-1"><a href="#题4-1" class="headerlink" title="题4"></a>题4</h4><p> 4.网站的用户数量</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162618081.png" alt="image-20250623162617976" loading="lazy"></p>
-<p>flag{6}</p>
-<h4 id="题5-1"><a href="#题5-1" class="headerlink" title="题5"></a>题5</h4><p> 5.连接员工信息资产的账号有多少</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250623162608456.png" alt="image-20250623162608238" loading="lazy"></p>
-<p>flag{2}</p>
-<h3 id="最爱的专辑"><a href="#最爱的专辑" class="headerlink" title="最爱的专辑"></a>最爱的专辑</h3><p>题目给的base64解码结果为：我爱火星哥</p>
-<p>deepsound发现隐藏加密文件，解密拿到压缩包</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153519625.png" alt="image-20250624153519548" loading="lazy"></p>
-<p>拿到apt.jpg和短信信息文件夹</p>
-<p>图片中发现压缩包</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624153936397.png" alt="image-20250624153936341" loading="lazy"></p>
-<p>解压密码就是短信信息了</p>
-<p>提示九键，尝试九键解密</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624154337141.png" alt="image-20250624154337086" loading="lazy"></p>
-<p>解压密码是Bruno Mars</p>
-<h3 id="为什么关机又关机"><a href="#为什么关机又关机" class="headerlink" title="为什么关机又关机"></a>为什么关机又关机</h3><p>bat中是关机脚本。很明显下面有0宽隐写</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155241522.png" alt="image-20250624155241355" loading="lazy"></p>
-<p>但是常见网址无法解密，在特殊网站可以解密<a href="https://33tool.com/text_cloak/#show">文字隐藏加密&#x2F;解密 - 蜻蜓在线工具</a></p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155554058.png" alt="image-20250624155553940" loading="lazy"></p>
-<p>解密后拿到exe，文件属性有问题</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624155707481.png" alt="image-20250624155707415" loading="lazy"></p>
-<p>最后的jpg使用steghide隐写，密码为图片中威力的计算结果160</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624160635267.png" alt="image-20250624160635170" loading="lazy"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">steghide extract -sf 女王威力很强奥.jpg -p <span class="string">&quot;160&quot;</span></span><br><span class="line">	wrote extracted data to <span class="string">&quot;flag.txt&quot;</span>.</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="doro"><a href="#doro" class="headerlink" title="doro"></a>doro</h3><p>提取出gif的帧间隔，可以发现帧间隔存在60和30</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;60&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>, <span class="string">&#x27;30&#x27;</span>]</span><br></pre></td></tr></table></figure>
-
-<p>并且帧的个数和房间号相匹配。将帧为60的房间号提取出来。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>,<span class="number">4</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">22</span>,<span class="number">25</span>,<span class="number">29</span>,<span class="number">33</span>,<span class="number">34</span>,<span class="number">35</span>,<span class="number">37</span>,<span class="number">38</span>,<span class="number">39</span>,<span class="number">57</span>,<span class="number">58</span>,<span class="number">59</span>,<span class="number">60</span>,<span class="number">65</span>,<span class="number">66</span>,<span class="number">67</span>,<span class="number">72</span></span><br></pre></td></tr></table></figure>
-
-<p>hint中提到2025年5月1日0时，注意到文件的修改时间很特殊，用其时间戳做差，转为ASCII码，提取出来帧为60的房间号对应的ASCII码</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162040739.png" alt="image-20250624162040673" loading="lazy"></p>
-<p>最后拿到结果：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dorolikestoeatoranges</span><br></pre></td></tr></table></figure>
-
-<p>解压拿到flag</p>
-<p><img src="https://raw.githubusercontent.com/gzynuli/blog-img/main/20250624162258689.png" alt="image-20250624162258626" loading="lazy"></p>
 ]]></content>
       <categories>
         <category>2025比赛归纳</category>
